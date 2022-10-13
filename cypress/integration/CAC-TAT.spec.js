@@ -1,16 +1,16 @@
 /// <reference types="Cypress" />
 
-describe('Central de Atendimento ao Cliente TAT', function() {
+describe('Central de Atendimento ao Cliente TAT', ()=> {
 
-    beforeEach(function() {
+    beforeEach(()=> {
         cy.visit('./src/index.html')
     })
 
-    it('verifica o título da aplicação', function() {
+    it('verifica o título da aplicação', ()=> {
         cy.title().should('be.equal',"Central de Atendimento ao Cliente TAT")
     })
 
-    it('preenche os campos obrigatórios e envia o formulário', function() {
+    it('preenche os campos obrigatórios e envia o formulário', ()=> {
         
         const text = 'ESta mensagem é apenas para teste. ESta mensagem é apenas para teste. ESta mensagem é apenas para teste. ESta mensagem é apenas para teste.'
 
@@ -23,7 +23,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('.success').should('be.visible')
     })
 
-    it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function(){
+    it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', ()=>{
         cy.get('#firstName').type('Régis')
         cy.get('#lastName').type('Nyland Bloemer')
         cy.get('#email').type('registeste.com')
@@ -31,7 +31,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('.error').should('be.visible')
     })
 
-    it('verificação númerica', function(){
+    it('verificação númerica', ()=>{
         cy.get('#firstName').type('Régis')
         cy.get('#lastName').type('Nyland Bloemer')
         cy.get('#email').type('regis@teste.com')
@@ -42,7 +42,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     })
 
 
-    it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', function(){    
+    it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', ()=>{    
         cy.get('#firstName').type('Régis')
         cy.get('#lastName').type('Nyland Bloemer')
         cy.get('#email').type('regis@teste.com')
@@ -51,7 +51,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('.error').should('be.visible')
     })
 
-    it('preenche e limpa os campos nome, sobrenome, email e telefone', function() {
+    it('preenche e limpa os campos nome, sobrenome, email e telefone', ()=> {
         cy.get('#firstName').type('Régis').should('have.value', 'Régis').clear().should('have.value', '')
         cy.get('#lastName').type('Nyland Bloemer').should('have.value', 'Nyland Bloemer').clear().should('have.value', '')
         cy.get('#email').type('regis@teste.com').should('have.value', 'regis@teste.com').clear().should('have.value', '')
@@ -81,11 +81,21 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         .should('have.value', 'mentoria')
     })
 
-    it.only('seleciona um produto (Blog) por seu índice', () => {
+    it('seleciona um produto (Blog) por seu índice', () => {
         cy.get('#product')
         .select(1)
         .should('have.value', 'blog')
     })
 
+    it('marca o tipo de atendimento "Feedback"', () => { 
+        cy.get('input[type="radio"]').check('elogio').should('be.checked')        
+        cy.get('input[type="radio"]').check('ajuda').should('be.checked')
+        cy.get('input[type="radio"]').check('feedback').should('be.checked')
+    })
+
+    it('marca cada tipo de atendimento', () => {
+        cy.get('input[type="radio"]')
+        .should('have.length', 3)
+    })
 
 })
