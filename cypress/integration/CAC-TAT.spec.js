@@ -136,4 +136,14 @@ describe('Central de Atendimento ao Cliente TAT', ()=> {
     
             })
     })
+
+    it('acessa a página da política de privacidade removendo o target e então clicando no link', ()=> {
+        cy.get('a').should('have.attr', 'target', '_blank')
+    })
+
+    it('acessa a página da política de privacidade removendo o target e então clicando no link', ()=> {
+        cy.get('a').invoke('removeAttr', 'target').click()
+    })
+
+
 })
