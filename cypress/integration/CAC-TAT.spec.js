@@ -2,6 +2,8 @@
 
 describe('Central de Atendimento ao Cliente TAT', ()=> {
 
+    const THREE_SECONDS_IN_MS = 3000
+
     beforeEach(()=> {
         cy.visit('./src/index.html')
     })
@@ -14,6 +16,8 @@ describe('Central de Atendimento ao Cliente TAT', ()=> {
         
         const text = 'ESta mensagem é apenas para teste. ESta mensagem é apenas para teste. ESta mensagem é apenas para teste. ESta mensagem é apenas para teste.'
 
+        cy.clock()
+
         cy.get('#firstName').type('Régis')
         cy.get('#lastName').type('Nyland Bloemer')
         cy.get('#email').type('regis@teste.com')
@@ -21,14 +25,25 @@ describe('Central de Atendimento ao Cliente TAT', ()=> {
         cy.get('button[type="submit"]').click()
 
         cy.get('.success').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.success').should('not.be.visible')
+
     })
 
-    it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', ()=>{
+    it.only('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', ()=>{
+        cy.clock()
         cy.get('#firstName').type('Régis')
         cy.get('#lastName').type('Nyland Bloemer')
         cy.get('#email').type('registeste.com')
         cy.get('button[type="submit"]').click()
+
         cy.get('.error').should('be.visible')
+    
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.error').should('not.be.visible')
     })
 
     it('verificação númerica', ()=>{
@@ -43,12 +58,18 @@ describe('Central de Atendimento ao Cliente TAT', ()=> {
 
 
     it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', ()=>{    
+        cy.clock()
         cy.get('#firstName').type('Régis')
         cy.get('#lastName').type('Nyland Bloemer')
         cy.get('#email').type('regis@teste.com')
         cy.get('#phone-checkbox').check()
         cy.get('button[type="submit"]').click()
+
         cy.get('.error').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.error').should('not.be.visible')
     })
 
     it('preenche e limpa os campos nome, sobrenome, email e telefone', ()=> {
